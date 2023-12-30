@@ -4,34 +4,24 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from django.db import connections
-from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.contrib import messages
 
 def index(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            # user = form.save()
-            # login(request, user)
-
-            # Use the 'other_database' alias to access the other database
-            with connections['user_database'].cursor() as cursor:
-                cursor.execute("SELECT * FROM tbl_user WHERE email=%s AND password=%s", [email, password])
-                user_data = cursor.fetchone()
-
-            if user_data:
-                # Perform login logic, e.g., set session variables, etc.
-                return redirect('course_outline',email,password)  # Redirect to home page after successful login
-            else:
-                # Handle invalid login credentials
-                return render(request, "website/index.html", {'form': form, 'error': 'Invalid login credentials'})
-
-    else:
-        form = LoginForm()
-    return render(request, "website/index.html", {'form': form})
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user_type='Judge'
+        with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_user WHERE email=%s AND password=%s AND user_type=%s", [email, password, user_type])
+            user_data = cursor.fetchone()
+        if user_data:
+            return redirect('course_outline',user_data[11],user_data[0])
+        else:
+            messages.error(request, "Username or Password is incorrect!")
+            return render(request, "website/index.html", {'error': 'Invalid login credentials'})
+    return render(request, "website/index.html")
 
 
 
