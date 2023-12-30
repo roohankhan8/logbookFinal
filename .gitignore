@@ -1,0 +1,6 @@
+/.vscode
+/env
+logbookNew/__pycache__
+web/__pycache__
+web/migrations/__pycache__
+userImages

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <!-- login.html -->
+    <form method="post" action="{% url 'index' %}">
+      {% csrf_token %} {{ form.as_p }}
+      <input type="submit" value="Login" />
+    </form>
+
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %} {% if user.is_authenticated %}
+    <p>Hello, {{ user.username }}! You are authenticated.</p>
+    {% endif %}
+
+    <a href="{% url 'course_outline' 1 5 %}">
+      <button>Go</button>
+    </a>
+  </body>
+</html>

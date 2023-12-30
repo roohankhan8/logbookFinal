@@ -1,0 +1,58 @@
+{% extends 'website/header_2.html' %} 
+{% block title %}Notes{% endblock %} 
+{% load static %} 
+{% block content %}
+<!-- second header  -->
+<nav class="navbars">
+  <div class="container-fluid-nav text-center">
+    <h5>Notes</h5>
+  </div>
+</nav> 
+  <!-- Notes section -->
+  <form action="" method="post">
+    {% csrf_token %}
+ <div 
+ class="QA_container mb-1 p-5">
+    <div 
+    class="col-md-12"><br>
+        <textarea 
+        class="form-control" 
+        rows="1" 
+        style="height:100%; font-size: 19PX;" 
+        placeholder="Title" 
+        name="note_title">{{note.note_title}}</textarea>
+    </div>
+    <div 
+    class="col-md-12"><br>
+    <textarea
+    class="form-control"
+    rows="5" 
+    style="height:100%; font-size: 19PX;" 
+    placeholder="Note something" 
+    name="note_desc">{{note.note_desc}}</textarea>
+    </div>
+    <div 
+    class="container"> 
+      <div 
+      class="row">
+        <div 
+        class="col-6 d-flex justify-content-start">
+        <!-- Back button -->
+          <a href="{% url 'course_outline' pk sk %}">
+            <button 
+          class="btn btn-success" 
+          type="button">Back</button>
+          </a>
+        </div>
+        <div 
+        class="col-6 d-flex justify-content-end">
+        <!-- Save button -->
+          <button 
+          class="btn btn-success" style="margin: 0 0 0 1em;" 
+          type="submit">Save</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div> 
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends 'website/header_2.html' %} 
+{% block title %}Step 3: DEVELOP IDEAS AND DRAFT SOLUTIONS{% endblock %} 
+{% load static %} 
+{% block content %}
+    <!-- second header  -->
+    <nav class="navbars">
+      <div class="container-fluid-nav text-center">
+        <h5>STEP 3- DEVELOP IDEAS AND DRAFT ALTERNATE SOLUTIONS</h5>
+      </div>
+    </nav><br><br>
+    <!-- second header ends  -->
+      <div class="container-fluid-nav text-center">
+        <h5>{{step2.problem_title}}</h5>
+      </div>
+ <!-- Question Answeer Box -->
+    <div class="QA_container mb-1 p-5">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="form-label" for="inputlg"
+            >3.1 List the most important factors in solving this problem?
+          </label>
+          <textarea
+            class="form-control"
+            rows="10"
+            placeholder="Your Answer"
+            name="factors"
+          >{{step3.factors}}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputlg">3.1.1
+            what are some different ways you can solve this problem?
+          </label>
+          <textarea class="form-control" rows="10" placeholder="Your Answer" name="ways_to_solve">{{step3.ways_to_solve}}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputlg"
+            >3.2 Research different sources to find any similar solutions
+            already out there!</label
+          >
+          <textarea
+            class="form-control"
+            rows="10"
+            placeholder="Your Answer"
+            name="research"
+          >{{step3.research}}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputlg">3.2.1  How are they different from what you are
+            trying to do?</label>
+          <textarea class="form-control" rows="5" placeholder="Your Answer" name="difference">{{step3.difference}}</textarea>
+        </div><br>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 d-flex align-items-center justify-content-start">
+          <button class="btn btn-success mr-1" type="button">
+            <a href="{% url 'step_2' pk sk %}">Back</a>
+          </button>
+          {% include 'website/buttons.html' %}
+    <!-- Buttons ends-->
+      </form>
+    </div>
+    <!-- Question Answeer Box  Ends-->
+ 
+    {% endblock %}

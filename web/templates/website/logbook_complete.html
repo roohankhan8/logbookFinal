@@ -1,0 +1,55 @@
+{% extends 'website/header_2.html' %} {% block title %}Logbook Completed
+{% endblock %} {% load static %} {% block content %}
+<!-- second header  -->
+<nav class="navbars">
+  <div class="container-fluid-nav text-center">
+    <h3>"THE BEST WAY TO PRIDICT THE FUTURE IS TO INVENT IT"</h3>
+  </div>
+</nav>
+<!-- second header ends  -->
+<!-- Question Answeer Box -->
+<div class="py-5 text-center">
+  <div class="container">
+    <div class="row">
+      <div class="mx-auto col-md-12">
+        <div class="mx-auto col-md-12" style="padding: 50px">
+          <img src="{% static 'images/logbook complete.png' %}" />
+        </div>
+        <h4 class="mb-3">
+          congratulations to team xyz on the successful completion of your
+          logbook
+        </h4>
+        <br /><br />
+      </div>
+    </div>
+    <!-- Question Answeer Box  Ends-->
+    <!-- Buttons-->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-6 d-flex align-items-center justify-content-start">
+          <button
+            class="btn btn-success"
+            style="margin: 0 1em 0 0"
+            type="button"
+          >
+            <a href="{% url 'survey' pk sk %}">Back</a>
+          </button>
+        </div>
+        <div class="col-6 d-flex align-items-center justify-content-end">
+          <a href="{% url 'preview_logbook' pk sk %}">
+            <button
+              class="btn btn-success"
+              style="margin: 0 1em 0 0"
+              type="button"
+            >
+              Preview
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Buttons ends-->
+    {% endblock %}
+  </div>
+</div>
