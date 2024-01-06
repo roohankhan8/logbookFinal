@@ -1,5 +1,5 @@
 /.vscode
-/env
+/myenv
 logbookNew/__pycache__
 web/__pycache__
 web/migrations/__pycache__
