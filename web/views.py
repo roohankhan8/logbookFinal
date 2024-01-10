@@ -12,7 +12,7 @@ def index(request):
     if request.method == 'POST':
         email = request.POST.get("email")
         password = request.POST.get("password")
-        user_type='Judge'
+        user_type='Student'
         with connections['user_database'].cursor() as cursor:
             cursor.execute("SELECT * FROM tbl_user WHERE email=%s AND password=%s AND user_type=%s", [email, password, user_type])
             user_data = cursor.fetchone()

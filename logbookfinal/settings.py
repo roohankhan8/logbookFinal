@@ -77,26 +77,34 @@ WSGI_APPLICATION = 'logbookfinal.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
     # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'finallogbook',
-    #     'USER': 'admin',
-    #     'PASSWORD': 'admin',
-    #     'HOST': 'localhost',
-    #     'PORT': '3306',
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
     # },
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eduedget001_dare2design',
+        'USER': 'eduedget001_dare2design',
+        'PASSWORD': 't3!cg7cu2rTH',
+        'HOST': 'eduedget001.mysql.guardedhost.com',
+        'PORT': '3306',
+    },
     'user_database': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'emuinven001_dare2design',
-        'USER': 'emuinven001_dare2design',
-        'PASSWORD': 'g)qnjT5K4^8e',
-        'HOST': 'emuinven001.mysql.guardedhost.com',
+        'NAME': 'eduedget001_dare2design',
+        'USER': 'eduedget001_dare2design',
+        'PASSWORD': 't3!cg7cu2rTH',
+        'HOST': 'eduedget001.mysql.guardedhost.com',
         'PORT': '3306',
         },
+    # 'user_database': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'emuinven001_dare2design',
+    #     'USER': 'emuinven001_dare2design',
+    #     'PASSWORD': 'g)qnjT5K4^8e',
+    #     'HOST': 'emuinven001.mysql.guardedhost.com',
+    #     'PORT': '3306',
+    #     },
 }
 
 
