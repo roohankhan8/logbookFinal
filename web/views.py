@@ -320,6 +320,9 @@ def step_3(request, pk, sk):
                 userId=pk,
                 teamId=sk,
                 factors=factors,
+                ways_to_solve=ways_to_solve,
+                research=research,
+                difference=difference,
             )
             return redirect("step_4", pk, sk)
         elif (
@@ -386,6 +389,7 @@ def step_4(request, pk, sk):
             step_four_instance.blueprint=step4.blueprint
         else:
             step_four_instance.blueprint=blueprint
+        print(blueprint)
         return redirect("step_5", pk, sk)
     if (step4): context = {"pk": pk, "sk": sk, "step4": step4,'issues':step4.issues.all}
     else: context = {"pk": pk, "sk": sk, "step4": step4}
