@@ -1,0 +1,116 @@
+{% extends 'website/header.html' %} {% block title %}Notes{% endblock %} {% load
+static %} {% block content %}
+<div class="sidebar close">
+  <ul class="nav-links">
+    <!-- option 1: Course outline dropdown menu -->
+    <br />
+    <li>
+      <div class="iocn-link">
+        <a href="{% url 'course_outline' pk sk %}">
+          <i class="bx bx-book"></i>
+          <span class="link_name">Course Outline</span>
+        </a>
+        <i class="bx bxs-chevron-down arrow"></i>
+      </div>
+      <ul class="sub-menu">
+        <li>
+          <a class="link_name" href="{% url 'course_outline' pk sk %}"
+            >Course Outline</a
+          >
+        </li>
+        <li>
+          <a href="{% url 'record_of_invention' pk sk %}"
+            >Record of invention</a
+          >
+        </li>
+        <li>
+          <a href="{% url 'statement_of_originality' pk sk %}"
+            >Statment of orignality</a
+          >
+        </li>
+        <li><a href="{% url 'step_1' pk sk %}">Recognize</a></li>
+        <li>
+          <a href="{% url 'step_2' pk sk %}">Define & make sense </a>
+        </li>
+        <li><a href="{% url 'step_3' pk sk %}">Develop ideas</a></li>
+        <li>
+          <a href="{% url 'step_4' pk sk %}">Go to drawing board</a>
+        </li>
+        <li>
+          <a href="{% url 'step_5' pk sk %}">Plan for prototyping</a>
+        </li>
+        <li>
+          <a href="{% url 'step_6' pk sk %}">Over to the lab</a>
+        </li>
+        <li><a href="{% url 'step_7' pk sk %}">Test</a></li>
+        <li>
+          <a href="{% url 'step_8' pk sk %}">Prepare to market</a>
+        </li>
+      </ul>
+    </li>
+    <!-- option 2: Notes -->
+    <li>
+      <a href="{% url 'notes' pk sk %}">
+        <i class="bx bx-edit"></i>
+        <span class="link_name">Notes</span>
+      </a>
+      <ul class="sub-menu blank">
+        <li>
+          <a class="link_name" href="{% url 'notes' pk sk %}">Notes</a>
+        </li>
+      </ul>
+    </li>
+    <!-- option 3: Flowchart -->
+    <li>
+      <a href="{% url 'flowchart' pk sk %}">
+        <i class="bx bx-sitemap"></i>
+        <span class="link_name">Flowchart</span>
+      </a>
+      <ul class="sub-menu blank">
+        <li>
+          <a class="link_name" href="{% url 'flowchart' pk sk %}">Flowchart</a>
+        </li>
+      </ul>
+    </li>
+    <!-- option 4: Preview Logbook -->
+
+    <!-- option 4: Preview Logbook -->
+    <li>
+      <a href="{% url 'preview_logbook' pk sk %}">
+        <i class="bx bx-book-open"></i>
+        <span class="link_name">Preview Logbook</span>
+      </a>
+      <ul class="sub-menu blank">
+        <li>
+          <a class="link_name" href="{% url 'preview_logbook' pk sk %}"
+            >Preview Logbook</a
+          >
+        </li>
+      </ul>
+    </li>
+    <!-- option 5: Print Logbook -->
+    <li>
+      <a href="#">
+        <i class="bx bx-printer"></i>
+        <span class="link_name">Print Logbook</span>
+      </a>
+      <ul class="sub-menu blank">
+        <li><a class="link_name" href="#">Print Logbook</a></li>
+      </ul>
+    </li>
+    <!-- option 6: Submit Logbook -->
+    <li>
+      <a href="#">
+        <i class="bx bx-upload"></i>
+        <span class="link_name">Submit Logbook</span>
+      </a>
+      <ul class="sub-menu blank">
+        <li><a class="link_name" href="#">Submit Logbook</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<section class="home-section bg-white">
+  {% block content %} {% endblock %}
+</section>
+{% endblock content %}

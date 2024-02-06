@@ -133,8 +133,25 @@
         </li>
       </ul>
     </div>
-    <section class="home-section bg-white">
+    <section class="home-section">
+      <div class="main-header">
+        <img src="./assets/images/pic1.jpeg" alt="" class="img1" />
+        <h1 class="" style="text-align: center">Logbook</h1>
+        <img src="./assets/images/pic2.jpeg" alt="" class="img2" />
+      </div>
       {% block content %} {% endblock %}
+      <div class="footer">
+        <div class="upper">
+          <img src="./assets/images/pic5.jpeg" alt="" class="img3" />
+          <img src="./assets/images/pic3.jpeg" alt="" class="img4" />
+          <img src="./assets/images/pic4.jpeg" alt="" class="img5" />
+          <img src="./assets/images/pic6.jpeg" alt="" class="img6" />
+        </div>
+        <div class="lower">
+          <p>Copyright 2019-2024 InfoEdMedia, Inc.</p>
+          <p class="l1">Contact: <a href="#">emu_invent@emich.edu</a></p>
+        </div>
+      </div>
     </section>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -147,6 +164,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="{% static 'js/script.js' %}"></script>
-    <script src="{% static 'js/Chat.js' %}"></script>
+    <!-- <script src="{% static 'js/Chat.js' %}"></script> -->
   </body>
 </html>

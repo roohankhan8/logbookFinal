@@ -17,13 +17,33 @@ def index(request):
             cursor.execute("SELECT * FROM tbl_user WHERE email=%s AND password=%s AND user_type=%s", [email, password, user_type])
             user_data = cursor.fetchone()
         if user_data:
-            return redirect('course_outline',user_data[11],user_data[0])
+            return redirect('teams',user_data[0])
         else:
             messages.error(request, "Username or Password is incorrect!")
             return render(request, "website/index.html", {'error': 'Invalid login credentials'})
     return render(request, "website/index.html")
 
 
+def teams(request,pk):
+    student_id=pk
+    with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
+            user_data = cursor.fetchall()
+    team_ids=[]
+    all_teams=[]
+    teams={}
+    if user_data:
+        for i in user_data:
+            team_ids.append(i[1])
+        for i in team_ids:
+            with connections['user_database'].cursor() as cursor:
+                cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [i])
+                team_data = cursor.fetchone()
+                all_teams.append(team_data)
+        for i in all_teams:
+            teams[i[0]]=i[1]
+    context={'user':user_data, 'teams':teams}
+    return render(request, 'website/teams.html', context)
 
 # @login_required
 def course_outline(request, pk, sk):
