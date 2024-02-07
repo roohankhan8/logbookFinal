@@ -26,7 +26,7 @@ OfInvention{%endblock %} {% load static %} {% block content %}
       {% for team in teams.items %}
       <div class="shadow p-1 mb-4 bg-body-tertiary rounded">
         <li class="p-2 d-flex justify-content-between">
-          <a id="logbooks" href="{% url 'course_outline' user.0.1 team.0 %}">
+          <a id="logbooks" href="{% url 'course_outline' pk team.0 %}">
             <h4 class="title">
               {{team.1}}
               <div class="code">{{team.0}}</div>

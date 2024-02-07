@@ -42,12 +42,20 @@ def teams(request,pk):
                 all_teams.append(team_data)
         for i in all_teams:
             teams[i[0]]=i[1]
-    context={'user':user_data, 'teams':teams}
+    context={'pk':pk, 'user':user_data, 'teams':teams}
     return render(request, 'website/teams.html', context)
 
-# @login_required
 def course_outline(request, pk, sk):
-    context = {"pk": pk, "sk": sk}
+    student_id=pk
+    team_id=sk
+    with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
+            user_data = cursor.fetchone()
+            print(user_data)
+    with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [team_id])
+            team_data = cursor.fetchone()
+    context = {"pk": pk, "sk": sk, 'user':user_data, 'team':team_data}
     return render(request, "website/outline.html", context)
 
 

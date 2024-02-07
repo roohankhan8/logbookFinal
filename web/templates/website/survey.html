@@ -91,9 +91,11 @@
     <div class="container">
       <div class="row">
         <div class="col-6 d-flex align-items-center justify-content-start">
-          <button class="btn btn-success mr-1" type="button">
-            <a href="{% url 'step_8' pk sk %}">Back</a>
-          </button>
+          <a href="{% url 'step_8' pk sk %}">
+            <button class="btn btn-success mr-1" type="button">
+              Back
+            </button>
+          </a>
           {% include 'website/buttons.html' %}
     <!-- Buttons ends-->
       </form>
