@@ -23,8 +23,19 @@
   <body class="bg-white">
     <div class="sidebar close">
       <ul class="nav-links">
+        <!-- option 2: Notes -->
+        <li>
+          <a href="{% url 'teams' pk %}">
+            <i class="bx bx-group"></i>
+            <span class="link_name">Teams</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li>
+              <a class="link_name" href="{% url 'teams' pk %}">Teams</a>
+            </li>
+          </ul>
+        </li>
         <!-- option 1: Course outline dropdown menu -->
-        <br />
         <li>
           <div class="iocn-link">
             <a href="{% url 'course_outline' pk sk %}">
@@ -135,9 +146,14 @@
     </div>
     <section class="home-section">
       <div class="main-header">
-        <img src="{%static 'images/pic1.jpeg' %}" alt="" class="img1" />
+        <div>
+          <img src="{%static 'images/pic2.jpeg' %}" alt="" class="img2" />
+          <img src="{%static 'images/pic1.jpeg' %}" alt="" class="img1" />
+        </div>
         <h1 class="" style="text-align: center">Logbook</h1>
-        <img src="{%static 'images/pic2.jpeg' %}" alt="" class="img2" />
+        <a href="{% url 'index' %}">
+          <button class="btn btn-success mr-1" type="button">Logout</button>
+        </a>
       </div>
       {% block content %} {% endblock %}
       <div class="footer">
