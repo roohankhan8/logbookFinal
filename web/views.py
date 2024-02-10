@@ -51,7 +51,7 @@ def course_outline(request, pk, sk):
     with connections['user_database'].cursor() as cursor:
             cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
             user_data = cursor.fetchone()
-            print(user_data)
+            # print(user_data)
     with connections['user_database'].cursor() as cursor:
             cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [team_id])
             team_data = cursor.fetchone()
