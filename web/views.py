@@ -330,7 +330,7 @@ def step_2(request, pk, sk):
         step_two_instance.problems.add(member1, member2, member3, member4)
 
         return redirect("step_3", pk, sk)
-    if (step2): context = {"pk": pk, "sk": sk, "step2": step2, "members": step2.problems.all}
+    if (step2): context = {"pk": pk, "sk": sk, "step2": step2}
     else: context = {"pk": pk, "sk": sk, "step2": step2}
     return render(request, "website/step_2.html", context)
 
@@ -414,7 +414,8 @@ def step_4(request, pk, sk):
             )
         step_four_instance.issues.add(issue1,issue2,issue3)
         if blueprint == None:
-            step_four_instance.blueprint=step4.blueprint
+            # step_four_instance.blueprint=step4.blueprint
+            pass
         else:
             step_four_instance.blueprint=blueprint
         print(blueprint)
@@ -648,10 +649,13 @@ def preview_logbook(request, pk, sk):
         "sk": sk,
         "record": record,
         "statement": statement,
+        "inventors": statement.inventors.all,
         "step1": step1,
         "step2": step2,
+        "members": step2.problems.all,
         "step3": step3,
         "step4": step4,
+        'issues':step4.issues.all,
         "step5": step5,
         "step6": step6,
         "step7": step7,
