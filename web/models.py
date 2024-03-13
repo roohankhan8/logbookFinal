@@ -95,7 +95,7 @@ class stepFour(models.Model):
     teamId = models.IntegerField()
     date_updated = models.DateTimeField(auto_now_add=True)
 
-    blueprint = models.ImageField(null=True, blank=True)
+    blueprint = models.ImageField(null=True, blank=True,upload_to='images/')
     teacher_name = models.TextField()
     teacher_sign = models.TextField()
     date = models.TextField()

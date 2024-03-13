@@ -17,17 +17,45 @@ def index(request):
             cursor.execute("SELECT * FROM tbl_user WHERE email=%s AND password=%s AND user_type=%s", [email, password, user_type])
             user_data = cursor.fetchone()
         if user_data:
-            return redirect('course_outline',user_data[11],user_data[0])
+            return redirect('teams',user_data[0])
         else:
             messages.error(request, "Username or Password is incorrect!")
             return render(request, "website/index.html", {'error': 'Invalid login credentials'})
     return render(request, "website/index.html")
 
 
+def teams(request,pk):
+    student_id=pk
+    with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
+            user_data = cursor.fetchall()
+    team_ids=[]
+    all_teams=[]
+    teams={}
+    if user_data:
+        for i in user_data:
+            team_ids.append(i[1])
+        for i in team_ids:
+            with connections['user_database'].cursor() as cursor:
+                cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [i])
+                team_data = cursor.fetchone()
+                all_teams.append(team_data)
+        for i in all_teams:
+            teams[i[0]]=i[1]
+    context={'pk':pk, 'user':user_data, 'teams':teams}
+    return render(request, 'website/teams.html', context)
 
-# @login_required
 def course_outline(request, pk, sk):
-    context = {"pk": pk, "sk": sk}
+    student_id=pk
+    team_id=sk
+    with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
+            user_data = cursor.fetchone()
+            # print(user_data)
+    with connections['user_database'].cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [team_id])
+            team_data = cursor.fetchone()
+    context = {"pk": pk, "sk": sk, 'user':user_data, 'team':team_data}
     return render(request, "website/outline.html", context)
 
 
@@ -302,7 +330,7 @@ def step_2(request, pk, sk):
         step_two_instance.problems.add(member1, member2, member3, member4)
 
         return redirect("step_3", pk, sk)
-    if (step2): context = {"pk": pk, "sk": sk, "step2": step2, "members": step2.problems.all}
+    if (step2): context = {"pk": pk, "sk": sk, "step2": step2}
     else: context = {"pk": pk, "sk": sk, "step2": step2}
     return render(request, "website/step_2.html", context)
 
@@ -386,7 +414,8 @@ def step_4(request, pk, sk):
             )
         step_four_instance.issues.add(issue1,issue2,issue3)
         if blueprint == None:
-            step_four_instance.blueprint=step4.blueprint
+            # step_four_instance.blueprint=step4.blueprint
+            pass
         else:
             step_four_instance.blueprint=blueprint
         print(blueprint)
@@ -620,10 +649,13 @@ def preview_logbook(request, pk, sk):
         "sk": sk,
         "record": record,
         "statement": statement,
+        "inventors": statement.inventors.all,
         "step1": step1,
         "step2": step2,
+        "members": step2.problems.all,
         "step3": step3,
         "step4": step4,
+        'issues':step4.issues.all,
         "step5": step5,
         "step6": step6,
         "step7": step7,

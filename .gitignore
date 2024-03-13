@@ -1,6 +1,7 @@
 /.vscode
-/myenv
-logbookNew/__pycache__
+logbookfinal/__pycache__
 web/__pycache__
 web/migrations/__pycache__
 userImages
+media
+myenv
