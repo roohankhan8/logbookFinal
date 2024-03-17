@@ -7,6 +7,18 @@ from django.db import connections
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
+from django.http import HttpResponse
+from django.template.loader import get_template
+# from wkhtmltopdf.utils import convert_to_pdf
+from .pdf import html2pdf
+
+def home(request):
+    return render(request, 'website/home.html')
+
+
+def my_view(request):
+    pdf=html2pdf(pdf.html)
+    return HttpResponse(pdf, content_type='application/pdf')
 
 def index(request):
     if request.method == 'POST':
@@ -186,8 +198,8 @@ def step_1(request, pk, sk):
                 teamId=sk,
                 identify_problems=identify_problems,
             )
-            return redirect("step_2", pk, sk)
-        return redirect("step_2", pk, sk)
+            return redirect("step_1", pk, sk)
+        return redirect("step_1", pk, sk)
     context = {"pk": pk, "sk": sk, "step1": step1}
     return render(request, "website/step_1.html", context)
 

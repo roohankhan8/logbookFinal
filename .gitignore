@@ -5,3 +5,4 @@ web/migrations/__pycache__
 userImages
 media
 myenv
+.hintrc

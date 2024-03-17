@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'web.apps.WebConfig'
+    'web.apps.WebConfig',
+    'wkhtmltopdf'
 ]
 
 MIDDLEWARE = [
@@ -77,18 +78,18 @@ WSGI_APPLICATION = 'logbookfinal.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eduedget001_dare2design',
-        'USER': 'eduedget001_dare2design',
-        'PASSWORD': 't3!cg7cu2rTH',
-        'HOST': 'eduedget001.mysql.guardedhost.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'eduedget001_dare2design',
+    #     'USER': 'eduedget001_dare2design',
+    #     'PASSWORD': 't3!cg7cu2rTH',
+    #     'HOST': 'eduedget001.mysql.guardedhost.com',
+    #     'PORT': '3306',
+    # },
     'user_database': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eduedget001_dare2design',
@@ -162,3 +163,5 @@ MESSAGE_TAGS = {
     messages.WARNING: "alert-warning",
     messages.ERROR: "alert-danger",
 }
+
+WKHTMLTOPDF_CMD = 'myenv\Lib\site-packages\wkhtmltopdf'

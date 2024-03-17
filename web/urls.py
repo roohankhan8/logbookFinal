@@ -1,7 +1,10 @@
 from django.urls import path
 from . import views
+from django.urls import path
 
 urlpatterns = [
+    path('home/',views.home,name='home'),
+    path('download/', views.my_view, name='download_pdf'),
     path("", views.index, name="index"),
     path("teams/<str:pk>/", views.teams, name="teams"),
     path(
