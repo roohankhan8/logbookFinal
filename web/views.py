@@ -7,18 +7,8 @@ from django.db import connections
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
-from django.http import HttpResponse
-from django.template.loader import get_template
-# from wkhtmltopdf.utils import convert_to_pdf
-from .pdf import html2pdf
-
-def home(request):
-    return render(request, 'website/home.html')
-
-
-def my_view(request):
-    pdf=html2pdf(pdf.html)
-    return HttpResponse(pdf, content_type='application/pdf')
+#changes done
+from django.http import HttpResponseRedirect
 
 def index(request):
     if request.method == 'POST':
@@ -78,23 +68,31 @@ def record_of_invention(request, pk, sk):
     if request.method == "POST":
         name = request.POST.get("name_of_invention")
         problem = request.POST.get("problem_it_solves")
-        if record == None:
-            recordOfInvention.objects.create(
-                userId=pk,
-                teamId=sk,
-                name_of_invention=name,
-                problem_it_solves=problem,
-            )
+        action = request.POST.get("action")
+        #changes done
+        if action == "save":
+            if record == None or name != record.name_of_invention or problem != record.problem_it_solves:
+                recordOfInvention.objects.create(
+                    userId=pk,
+                    teamId=sk,
+                    name_of_invention=name,
+                    problem_it_solves=problem,
+                )
+                #changes done
+                #return redirect("statement_of_originality", pk, sk)
+                return HttpResponseRedirect(request.path_info) 
+            '''if name != record.name_of_invention or problem != record.problem_it_solves:
+                recordOfInvention.objects.create(
+                    userId=pk,
+                    teamId=sk,
+                    name_of_invention=name,
+                    problem_it_solves=problem,
+                )
+                return redirect("statement_of_originality", pk, sk)'''
+        #changes done
+        elif action == "next":     
             return redirect("statement_of_originality", pk, sk)
-        if name != record.name_of_invention or problem != record.problem_it_solves:
-            recordOfInvention.objects.create(
-                userId=pk,
-                teamId=sk,
-                name_of_invention=name,
-                problem_it_solves=problem,
-            )
-            return redirect("statement_of_originality", pk, sk)
-        return redirect("statement_of_originality", pk, sk)
+        
     context = {"pk": pk, "sk": sk, "record": record}
     return render(request, "website/record_of_invention.html", context)
 
@@ -106,69 +104,75 @@ def statement_of_originality(request, pk, sk):
         .first()
     )
     if request.method == "POST":
-        inventor1 = request.POST.get("inventor1")
-        schoolnamegrade1 = request.POST.get("schoolnamegrade1")
-        sig1 = request.POST.get("sig1")
-        date1 = request.POST.get("date1")
+        #Changes done
+        action = request.POST.get("action")
+        if action == "save":
+            inventor1 = request.POST.get("inventor1")
+            schoolnamegrade1 = request.POST.get("schoolnamegrade1")
+            sig1 = request.POST.get("sig1")
+            date1 = request.POST.get("date1")
 
-        inventor2 = request.POST.get("inventor2")
-        schoolnamegrade2 = request.POST.get("schoolnamegrade2")
-        sig2 = request.POST.get("sig2")
-        date2 = request.POST.get("date2")
+            inventor2 = request.POST.get("inventor2")
+            schoolnamegrade2 = request.POST.get("schoolnamegrade2")
+            sig2 = request.POST.get("sig2")
+            date2 = request.POST.get("date2")
 
-        inventor3 = request.POST.get("inventor3")
-        schoolnamegrade3 = request.POST.get("schoolnamegrade3")
-        sig3 = request.POST.get("sig3")
-        date3 = request.POST.get("date3")
+            inventor3 = request.POST.get("inventor3")
+            schoolnamegrade3 = request.POST.get("schoolnamegrade3")
+            sig3 = request.POST.get("sig3")
+            date3 = request.POST.get("date3")
 
-        inventor4 = request.POST.get("inventor4")
-        schoolnamegrade4 = request.POST.get("schoolnamegrade4")
-        sig4 = request.POST.get("sig4")
-        date4 = request.POST.get("date4")
+            inventor4 = request.POST.get("inventor4")
+            schoolnamegrade4 = request.POST.get("schoolnamegrade4")
+            sig4 = request.POST.get("sig4")
+            date4 = request.POST.get("date4")
 
-        inventor5 = request.POST.get("inventor5")
-        schoolnamegrade5 = request.POST.get("schoolnamegrade5")
-        sig5 = request.POST.get("sig5")
-        date5 = request.POST.get("date5")
-        
-        inventor1=Inventor.objects.create(
-            inventor=inventor1,
-            schoolnamegrade=schoolnamegrade1,
-            sig=sig1,
-            date=date1
-        )
-        inventor2=Inventor.objects.create(
-            inventor=inventor2,
-            schoolnamegrade=schoolnamegrade2,
-            sig=sig2,
-            date=date2
-        )
-        inventor3=Inventor.objects.create(
-            inventor=inventor3,
-            schoolnamegrade=schoolnamegrade3,
-            sig=sig3,
-            date=date3
-        )
-        inventor4=Inventor.objects.create(
-            inventor=inventor4,
-            schoolnamegrade=schoolnamegrade4,
-            sig=sig4,
-            date=date4
-        )
-        inventor5=Inventor.objects.create(
-            inventor=inventor5,
-            schoolnamegrade=schoolnamegrade5,
-            sig=sig5,
-            date=date5
-        )
+            inventor5 = request.POST.get("inventor5")
+            schoolnamegrade5 = request.POST.get("schoolnamegrade5")
+            sig5 = request.POST.get("sig5")
+            date5 = request.POST.get("date5")
+            
+            inventor1=Inventor.objects.create(
+                inventor=inventor1,
+                schoolnamegrade=schoolnamegrade1,
+                sig=sig1,
+                date=date1
+            )
+            inventor2=Inventor.objects.create(
+                inventor=inventor2,
+                schoolnamegrade=schoolnamegrade2,
+                sig=sig2,
+                date=date2
+            )
+            inventor3=Inventor.objects.create(
+                inventor=inventor3,
+                schoolnamegrade=schoolnamegrade3,
+                sig=sig3,
+                date=date3
+            )
+            inventor4=Inventor.objects.create(
+                inventor=inventor4,
+                schoolnamegrade=schoolnamegrade4,
+                sig=sig4,
+                date=date4
+            )
+            inventor5=Inventor.objects.create(
+                inventor=inventor5,
+                schoolnamegrade=schoolnamegrade5,
+                sig=sig5,
+                date=date5
+            )
 
-        statement_of_originality_instance = statementOfOriginality.objects.create(
-            userId=pk,
-            teamId=sk,
-        )
-        statement_of_originality_instance.inventors.add(inventor1, inventor2, inventor3, inventor4, inventor5)
-
-        return redirect("flowchart", pk, sk)
+            statement_of_originality_instance = statementOfOriginality.objects.create(
+                userId=pk,
+                teamId=sk,
+            )
+            statement_of_originality_instance.inventors.add(inventor1, inventor2, inventor3, inventor4, inventor5)
+            return HttpResponseRedirect(request.path_info)  
+        #changes made
+        elif action == "next":
+            return redirect("flowchart", pk=pk, sk=sk)
+        #return redirect("flowchart", pk, sk)
     if (statement): context = {"pk": pk, "sk": sk, "statement": statement,"inventors": statement.inventors.all}
     else: context = {"pk": pk, "sk": sk, "statement": statement}
     return render(request, "website/statement_of_originality.html", context)
