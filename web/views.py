@@ -1,63 +1,85 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+
 from .models import *
 from django.db import connections
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
+
+# from django.contrib.auth.decorators import login_required
+# from django.contrib.auth import login
 from django.contrib import messages
-#changes done
-from django.http import HttpResponseRedirect
+from web.pdf import html2pdf
+
+
+def home(request):
+    return render(request, "website/home.html")
+
+
+def pdf(request, pk, sk):
+    pdf = html2pdf("website/logbook_pdf.html")
+    return HttpResponse(pdf, content_type="application/pdf")
+    # return render(request,"website/pdf.html")
+
 
 def index(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
-        user_type='Student'
-        with connections['user_database'].cursor() as cursor:
-            cursor.execute("SELECT * FROM tbl_user WHERE email=%s AND password=%s AND user_type=%s", [email, password, user_type])
+        user_type = "Student"
+        with connections["user_database"].cursor() as cursor:
+            cursor.execute(
+                "SELECT * FROM tbl_user WHERE email=%s AND password=%s AND user_type=%s",
+                [email, password, user_type],
+            )
             user_data = cursor.fetchone()
         if user_data:
-            return redirect('teams',user_data[0])
+            return redirect("teams", user_data[0])
         else:
             messages.error(request, "Username or Password is incorrect!")
-            return render(request, "website/index.html", {'error': 'Invalid login credentials'})
+            return render(
+                request, "website/index.html", {"error": "Invalid login credentials"}
+            )
     return render(request, "website/index.html")
 
 
-def teams(request,pk):
-    student_id=pk
-    with connections['user_database'].cursor() as cursor:
-            cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
-            user_data = cursor.fetchall()
-    team_ids=[]
-    all_teams=[]
-    teams={}
+def teams(request, pk):
+    student_id = pk
+    with connections["user_database"].cursor() as cursor:
+        cursor.execute(
+            "SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id]
+        )
+        user_data = cursor.fetchall()
+    team_ids = []
+    all_teams = []
+    teams = {}
     if user_data:
         for i in user_data:
             team_ids.append(i[1])
         for i in team_ids:
-            with connections['user_database'].cursor() as cursor:
+            with connections["user_database"].cursor() as cursor:
                 cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [i])
                 team_data = cursor.fetchone()
                 all_teams.append(team_data)
         for i in all_teams:
-            teams[i[0]]=i[1]
-    context={'pk':pk, 'user':user_data, 'teams':teams}
-    return render(request, 'website/teams.html', context)
+            teams[i[0]] = i[1]
+    context = {"pk": pk, "user": user_data, "teams": teams}
+    return render(request, "website/teams.html", context)
+
 
 def course_outline(request, pk, sk):
-    student_id=pk
-    team_id=sk
-    with connections['user_database'].cursor() as cursor:
-            cursor.execute("SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id])
-            user_data = cursor.fetchone()
-            # print(user_data)
-    with connections['user_database'].cursor() as cursor:
-            cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [team_id])
-            team_data = cursor.fetchone()
-    context = {"pk": pk, "sk": sk, 'user':user_data, 'team':team_data}
+    student_id = pk
+    team_id = sk
+    with connections["user_database"].cursor() as cursor:
+        cursor.execute(
+            "SELECT * FROM tbl_team_member WHERE student_id=%s", [student_id]
+        )
+        user_data = cursor.fetchone()
+        # print(user_data)
+    with connections["user_database"].cursor() as cursor:
+        cursor.execute("SELECT * FROM tbl_team WHERE id=%s", [team_id])
+        team_data = cursor.fetchone()
+    context = {"pk": pk, "sk": sk, "user": user_data, "team": team_data}
     return render(request, "website/outline.html", context)
 
 
@@ -68,9 +90,12 @@ def record_of_invention(request, pk, sk):
     if request.method == "POST":
         name = request.POST.get("name_of_invention")
         problem = request.POST.get("problem_it_solves")
-        action = request.POST.get("action")
-        #changes done
-        if record == None or name != record.name_of_invention or problem != record.problem_it_solves:
+        # changes done
+        if (
+            record == None
+            or name != record.name_of_invention
+            or problem != record.problem_it_solves
+        ):
             recordOfInvention.objects.create(
                 userId=pk,
                 teamId=sk,
@@ -85,11 +110,10 @@ def record_of_invention(request, pk, sk):
                 problem_it_solves=problem,
             )
             return redirect("statement_of_originality", pk, sk)
-        #changes done
+        action = request.POST.get("action")
         if action == "save":
             return HttpResponseRedirect(request.path_info)
-        #changes done
-        elif action == "next":     
+        elif action == "next":
             return redirect("statement_of_originality", pk, sk)
     context = {"pk": pk, "sk": sk, "record": record}
     return render(request, "website/record_of_invention.html", context)
@@ -102,7 +126,7 @@ def statement_of_originality(request, pk, sk):
         .first()
     )
     if request.method == "POST":
-        #Changes done
+        # Changes done
         action = request.POST.get("action")
         inventor1 = request.POST.get("inventor1")
         schoolnamegrade1 = request.POST.get("schoolnamegrade1")
@@ -124,47 +148,41 @@ def statement_of_originality(request, pk, sk):
         schoolnamegrade5 = request.POST.get("schoolnamegrade5")
         sig5 = request.POST.get("sig5")
         date5 = request.POST.get("date5")
-        inventor1=Inventor.objects.create(
-            inventor=inventor1,
-            schoolnamegrade=schoolnamegrade1,
-            sig=sig1,
-            date=date1
+        inventor1 = Inventor.objects.create(
+            inventor=inventor1, schoolnamegrade=schoolnamegrade1, sig=sig1, date=date1
         )
-        inventor2=Inventor.objects.create(
-            inventor=inventor2,
-            schoolnamegrade=schoolnamegrade2,
-            sig=sig2,
-            date=date2
+        inventor2 = Inventor.objects.create(
+            inventor=inventor2, schoolnamegrade=schoolnamegrade2, sig=sig2, date=date2
         )
-        inventor3=Inventor.objects.create(
-            inventor=inventor3,
-            schoolnamegrade=schoolnamegrade3,
-            sig=sig3,
-            date=date3
+        inventor3 = Inventor.objects.create(
+            inventor=inventor3, schoolnamegrade=schoolnamegrade3, sig=sig3, date=date3
         )
-        inventor4=Inventor.objects.create(
-            inventor=inventor4,
-            schoolnamegrade=schoolnamegrade4,
-            sig=sig4,
-            date=date4
+        inventor4 = Inventor.objects.create(
+            inventor=inventor4, schoolnamegrade=schoolnamegrade4, sig=sig4, date=date4
         )
-        inventor5=Inventor.objects.create(
-            inventor=inventor5,
-            schoolnamegrade=schoolnamegrade5,
-            sig=sig5,
-            date=date5
+        inventor5 = Inventor.objects.create(
+            inventor=inventor5, schoolnamegrade=schoolnamegrade5, sig=sig5, date=date5
         )
         statement_of_originality_instance = statementOfOriginality.objects.create(
             userId=pk,
             teamId=sk,
         )
-        statement_of_originality_instance.inventors.add(inventor1, inventor2, inventor3, inventor4, inventor5)
+        statement_of_originality_instance.inventors.add(
+            inventor1, inventor2, inventor3, inventor4, inventor5
+        )
         if action == "save":
-            return HttpResponseRedirect(request.path_info)  
+            return HttpResponseRedirect(request.path_info)
         elif action == "next":
             return redirect("flowchart", pk=pk, sk=sk)
-    if (statement): context = {"pk": pk, "sk": sk, "statement": statement,"inventors": statement.inventors.all}
-    else: context = {"pk": pk, "sk": sk, "statement": statement}
+    if statement:
+        context = {
+            "pk": pk,
+            "sk": sk,
+            "statement": statement,
+            "inventors": statement.inventors.all,
+        }
+    else:
+        context = {"pk": pk, "sk": sk, "statement": statement}
     return render(request, "website/statement_of_originality.html", context)
 
 
@@ -193,7 +211,12 @@ def step_1(request, pk, sk):
                 identify_problems=identify_problems,
             )
             return redirect("step_1", pk, sk)
-        return redirect("step_1", pk, sk)
+
+        action = request.POST.get("action")
+        if action == "save":
+            return HttpResponseRedirect(request.path_info)
+        elif action == "next":
+            return redirect("step_1", pk, sk)
     context = {"pk": pk, "sk": sk, "step1": step1}
     return render(request, "website/step_1.html", context)
 
@@ -335,9 +358,15 @@ def step_2(request, pk, sk):
         )
         step_two_instance.problems.add(member1, member2, member3, member4)
 
-        return redirect("step_3", pk, sk)
-    if (step2): context = {"pk": pk, "sk": sk, "step2": step2}
-    else: context = {"pk": pk, "sk": sk, "step2": step2}
+        action = request.POST.get("action")
+        if action == "save":
+            return HttpResponseRedirect(request.path_info)
+        elif action == "next":
+            return redirect("step_3", pk, sk)
+    if step2:
+        context = {"pk": pk, "sk": sk, "step2": step2}
+    else:
+        context = {"pk": pk, "sk": sk, "step2": step2}
     return render(request, "website/step_2.html", context)
 
 
@@ -374,7 +403,12 @@ def step_3(request, pk, sk):
                 difference=difference,
             )
             return redirect("step_4", pk, sk)
-        return redirect("step_4", pk, sk)
+
+        action = request.POST.get("action")
+        if action == "save":
+            return HttpResponseRedirect(request.path_info)
+        elif action == "next":
+            return redirect("step_4", pk, sk)
     context = {"pk": pk, "sk": sk, "step3": step3, "step2": step2}
     return render(request, "website/step_3.html", context)
 
@@ -400,34 +434,50 @@ def step_4(request, pk, sk):
         i3problemface = request.POST.get("i3problemface")
         sol_design_problem = request.POST.get("sol_design_problem")
         green_sol = request.POST.get("green_sol")
-        issue1=Issue.objects.create(
-            expert=i1expert, credentials=i1credentials, identified=i1identified, problemface=i1problemface
+        issue1 = Issue.objects.create(
+            expert=i1expert,
+            credentials=i1credentials,
+            identified=i1identified,
+            problemface=i1problemface,
         )
-        issue2=Issue.objects.create(
-            expert=i2expert, credentials=i2credentials, identified=i2identified, problemface=i2problemface
+        issue2 = Issue.objects.create(
+            expert=i2expert,
+            credentials=i2credentials,
+            identified=i2identified,
+            problemface=i2problemface,
         )
-        issue3=Issue.objects.create(
-            expert=i3expert, credentials=i3credentials, identified=i3identified, problemface=i3problemface
+        issue3 = Issue.objects.create(
+            expert=i3expert,
+            credentials=i3credentials,
+            identified=i3identified,
+            problemface=i3problemface,
         )
         step_four_instance = stepFour.objects.create(
-                userId=pk,
-                teamId=sk,
-                teacher_name=teacher_name,
-                teacher_sign=teacher_sign,
-                date=date,
-                sol_design_problem=sol_design_problem,
-                green_sol=green_sol,
-            )
-        step_four_instance.issues.add(issue1,issue2,issue3)
+            userId=pk,
+            teamId=sk,
+            teacher_name=teacher_name,
+            teacher_sign=teacher_sign,
+            date=date,
+            sol_design_problem=sol_design_problem,
+            green_sol=green_sol,
+        )
+        step_four_instance.issues.add(issue1, issue2, issue3)
         if blueprint == None:
             # step_four_instance.blueprint=step4.blueprint
             pass
         else:
-            step_four_instance.blueprint=blueprint
+            step_four_instance.blueprint = blueprint
         print(blueprint)
-        return redirect("step_5", pk, sk)
-    if (step4): context = {"pk": pk, "sk": sk, "step4": step4,'issues':step4.issues.all}
-    else: context = {"pk": pk, "sk": sk, "step4": step4}
+
+        action = request.POST.get("action")
+        if action == "save":
+            return HttpResponseRedirect(request.path_info)
+        elif action == "next":
+            return redirect("step_5", pk, sk)
+    if step4:
+        context = {"pk": pk, "sk": sk, "step4": step4, "issues": step4.issues.all}
+    else:
+        context = {"pk": pk, "sk": sk, "step4": step4}
     return render(request, "website/step_4.html", context)
 
 
@@ -661,7 +711,7 @@ def preview_logbook(request, pk, sk):
         "members": step2.problems.all,
         "step3": step3,
         "step4": step4,
-        'issues':step4.issues.all,
+        "issues": step4.issues.all,
         "step5": step5,
         "step6": step6,
         "step7": step7,
@@ -670,3 +720,64 @@ def preview_logbook(request, pk, sk):
         "note": note,
     }
     return render(request, "website/preview_logbook.html", context)
+
+
+def logbook_pdf(request, pk, sk):
+    record = (
+        recordOfInvention.objects.filter(teamId=sk).order_by("-date_updated").first()
+    )
+    statement = (
+        statementOfOriginality.objects.filter(teamId=sk)
+        .order_by("-date_updated")
+        .first()
+    )
+    step1 = stepOne.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step2 = stepTwo.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step3 = stepThree.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step4 = stepFour.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step5 = stepFive.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step6 = stepSix.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step7 = stepSeven.objects.filter(teamId=sk).order_by("-date_updated").first()
+    step8 = stepEight.objects.filter(teamId=sk).order_by("-date_updated").first()
+    survey = surveyLogbook.objects.filter(teamId=sk).order_by("-date_updated").first()
+    note = Note.objects.filter(teamId=sk).order_by("-date_updated").first()
+    context = {
+        "pk": pk,
+        "sk": sk,
+        "record": record,
+        "statement": statement,
+        "inventors": statement.inventors.all,
+        "step1": step1,
+        "step2": step2,
+        "members": step2.problems.all,
+        "step3": step3,
+        "step4": step4,
+        "issues": step4.issues.all,
+        "step5": step5,
+        "step6": step6,
+        "step7": step7,
+        "step8": step8,
+        "survey": survey,
+        "note": note,
+    }
+    return render(request, "website/preview_logbook.html", context)
+
+
+# from weasyprint import HTML
+
+# def convert_to_pdf(request, template_name):
+#   # Get the HTML content from the template
+#   context = {}  # You can add context data for the template here if needed
+#   response = render(request, template_name, context)
+#   html_string = response.content.decode('utf-8')
+
+#   # Create an HTML object from the string
+#   pdf = HTML(string=html_string)
+
+#   # Generate PDF data
+#   pdf_data = pdf.write_pdf()
+
+#   # Set the response content type and return the PDF data
+#   response = HttpResponse(pdf_data, content_type='application/pdf')
+#   response['Content-Disposition'] = f'attachment; filename=report.pdf'  # You can set a custom filename here
+#   return response

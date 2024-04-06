@@ -3,8 +3,8 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-    # path('home/',views.home,name='home'),
-    # path('download/', views.my_view, name='download_pdf'),
+    path('home/',views.home,name='home'),
+    path('pdf/<str:pk>/<str:sk>/', views.pdf, name='pdf'),
     path("", views.index, name="index"),
     path("teams/<str:pk>/", views.teams, name="teams"),
     path(
